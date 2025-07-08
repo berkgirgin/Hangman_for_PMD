@@ -1,0 +1,65 @@
+.hangmankeyboard-main-container {
+  display: flex;
+  justify-content: center;
+  padding: 1.75rem;
+  background-color: #fff0f5; /* soft pink background */
+  border-radius: 14px;
+  max-width: 690px;
+  margin: 0 auto;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+}
+
+.keys-main-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.key-row {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.key {
+  background-color: #ff69b4; /* light pink */
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  width: 46px;
+  height: 56px;
+  font-size: 1.15rem;
+  font-weight: bold;
+  text-align: center;
+  line-height: 56px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.1s ease, box-shadow 0.1s ease;
+  box-shadow: 0 4px #cc538f;
+}
+
+.key:hover {
+  background-color: #ff7abf;
+  box-shadow: 0 6px #bb4b86;
+}
+
+.key:active {
+  margin-top: 2px;
+  box-shadow: 0 2px #aa4478;
+}
+
+.used-letter {
+  background-color: rgba(255, 105, 180, 0.4); /* dark pink transparent */
+  color: #555; /* greyed out */
+  cursor: not-allowed;
+  box-shadow: none;
+  margin-top: 0;
+  opacity: 0.3;
+}
+
+/* Disable hover effect on used letters */
+.used-letter:hover {
+  background-color: rgba(255, 105, 180, 0.4);
+  box-shadow: none;
+  color: #555;
+}
