@@ -11,6 +11,7 @@ import correctGuessVideoSrc from "../assets/video_messages/muck.mp4";
 import wrongGuessVideoSrc from "../assets/video_messages/no.mp4";
 import winVideoSrc from "../assets/video_messages/win_video.mp4";
 import loseVideoSrc from "../assets/video_messages/lose_video.mp4";
+import { listOfWords } from "../data/listOfWords";
 
 type HangmanProviderProps = { children: ReactNode };
 
@@ -40,9 +41,9 @@ function useHangmanContext() {
 function HangmanProvider({ children }: HangmanProviderProps) {
   // Function must be declared *before* state since it’s used in initial state
   function getRandomWordToGuess(): string {
-    return "beeeeeeerk"; // Replace with real random word logic later
-    // const randomIndex = Math.floor(Math.random() * listOfWords.length);
-    // return listOfWords[randomIndex];
+    // return "beeeeeeerk"; // Replace with real random word logic later
+    const randomIndex = Math.floor(Math.random() * listOfWords.length);
+    return listOfWords[randomIndex];
   }
 
   const [wordToGuess, setWordToGuess] = useState<string>(
