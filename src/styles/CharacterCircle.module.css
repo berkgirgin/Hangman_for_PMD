@@ -50,3 +50,12 @@
 .fadeOut {
   opacity: 0;
 }
+
+@media (max-width: 620px) {
+  /* Put your mobile styles here */
+
+  .circle {
+    width: 200px;
+    height: 200px;
+  }
+}

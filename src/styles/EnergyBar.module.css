@@ -77,3 +77,19 @@
     transform: translateY(-50%) translateX(0);
   }
 }
+
+@media (max-width: 620px) {
+  /* Put your mobile styles here */
+
+  .barContainer {
+    width: 300px;
+    height: 30px;
+    margin: 1rem auto;
+
+    box-shadow:
+    /* Inside glows */ 0 0 20px #ff1493 inset,
+      0 0 10px rgba(255, 255, 255, 0.1) inset,
+      0 0 15px rgba(255, 255, 255, 0.15) inset,
+      /* Outside subtle white glow */ 0 0 10px rgba(255, 255, 255, 0.15);
+  }
+}

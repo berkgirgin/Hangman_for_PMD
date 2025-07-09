@@ -45,9 +45,9 @@ function HangmanProvider({ children }: HangmanProviderProps) {
 
   // Function must be declared *before* state since it’s used in initial state
   function getRandomWordToGuess(): string {
-    // return "beeeeeerrrkk"; // Replace with real random word logic later
-    const randomIndex = Math.floor(Math.random() * listOfWords.length);
-    return listOfWords[randomIndex];
+    return "beeeeeeerk"; // Replace with real random word logic later
+    // const randomIndex = Math.floor(Math.random() * listOfWords.length);
+    // return listOfWords[randomIndex];
   }
 
   const [wordToGuess, setWordToGuess] = useState<string>(

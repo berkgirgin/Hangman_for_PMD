@@ -63,3 +63,51 @@
   box-shadow: none;
   color: #555;
 }
+
+/* config for us flag background */
+
+.hangmankeyboard-main-container {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.hangmankeyboard-main-container::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 80%;
+  transform: translate(-50%, -50%);
+  background-image: url("../assets/images/us_background.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0.2;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@media (max-width: 620px) {
+  .hangmankeyboard-main-container {
+    padding: 1rem;
+    max-width: 100%;
+  }
+
+  .keys-main-container {
+    gap: 0.3rem;
+  }
+
+  .key-row {
+    gap: 0.3rem;
+  }
+
+  .key {
+    width: 32px;
+    height: 42px;
+    font-size: 0.95rem;
+    line-height: 42px;
+    border-radius: 6px;
+  }
+}
