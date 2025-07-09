@@ -5,7 +5,6 @@ import { EnergyBar } from "./EnergyBar";
 function HangmanDrawing() {
   const hangman = useHangmanContext();
 
-  const playedTurnsCount = hangman.numberOfTurns.allTurns;
   const wrongGuessesCount = hangman.numberOfTurns.failedTurns;
 
   if (wrongGuessesCount > 10) {
