@@ -1,8 +1,155 @@
-.gamepage-main-container {
+/* .gamepage-main-container {
   display: flex;
   flex-direction: column;
 
   justify-content: center;
   align-items: center;
   gap: 2rem;
+} */
+
+.gamepage-main-container {
+  display: flex;
+  flex-direction: column; /* stack vertically */
+  justify-content: center;
+  align-items: center; /* center horizontally */
+  gap: 2rem;
+  padding: 1rem;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  min-height: 80vh; /* optional, to fill viewport vertically */
+}
+
+.gamepage-character-container {
+  display: flex;
+  flex-direction: column; /* stack video and drawing vertically */
+  align-items: center;
+  /* gap: 1.5rem; */
+  width: 100%;
+  max-width: 600px; /* limit width */
+}
+
+.gamepage-game-container {
+  display: flex;
+  flex-direction: column; /* stack word and keyboard vertically */
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 600px; /* limit width */
+}
+
+.gameEndingOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.95);
+  z-index: 1000;
+  pointer-events: all; /* Prevent clicking through */
+  transition: opacity 1s ease-in-out;
+  opacity: 1;
+
+  /* Inner corner glow using box-shadow inset */
+  box-shadow: inset 0 0 80px rgba(0, 255, 0, 0),
+    /* Placeholder - overridden below */ inset 0 0 80px rgba(0, 255, 0, 0),
+    inset 0 0 80px rgba(0, 255, 0, 0), inset 0 0 80px rgba(0, 255, 0, 0);
+}
+
+.win {
+  box-shadow: inset 0 0 80px rgba(0, 255, 100, 0.6),
+    inset 10px 10px 120px rgba(0, 255, 100, 0.3),
+    inset -10px -10px 120px rgba(0, 255, 100, 0.3);
+}
+
+.lose {
+  box-shadow: inset 0 0 80px rgba(255, 0, 80, 0.6),
+    inset 10px 10px 120px rgba(255, 0, 80, 0.3),
+    inset -10px -10px 120px rgba(255, 0, 80, 0.3);
+}
+
+/* Wrapper for HangmanWord */
+.hangmanWordWrapper {
+  display: inline-block; /* needed for scaling */
+  transition: color 0.5s ease, transform 0.5s ease;
+
+  position: relative;
+  z-index: 1001; /* must be greater than overlay */
+}
+
+/* When game is over */
+.hangmanWordGameOver {
+  color: white !important; /* force white text */
+  transform: scale(1.5);
+}
+.hangmanWordGameOver,
+.hangmanWordGameOver * {
+  color: white !important;
+}
+
+.heartButton {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  background: #e91e63;
+  transform: rotate(-45deg);
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 0 12px #ff6f91, inset 0 0 12px #ff6f91;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+  user-select: none;
+  overflow: visible;
+  z-index: 1100; /* above overlay */
+
+  margin-top: 4rem;
+}
+
+.heartButton::before,
+.heartButton::after {
+  content: "";
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: #e91e63;
+  border-radius: 50%;
+  box-shadow: 0 0 12px #ff6f91, inset 0 0 12px #ff6f91;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.heartButton::before {
+  top: -50px; /* half of 100 */
+  left: 0;
+}
+
+.heartButton::after {
+  top: 0;
+  left: 50px; /* half of 100 */
+}
+
+.heartButton:hover {
+  background: #ff4081;
+  box-shadow: 0 0 15px #ff79a9, inset 0 0 15px #ff79a9;
+}
+
+.heartButton:hover::before,
+.heartButton:hover::after {
+  background: #ff4081;
+  box-shadow: 0 0 15px #ff79a9, inset 0 0 15px #ff79a9;
+}
+
+.heartButtonText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  font-size: 1.2rem;
+  font-weight: bold;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
+  z-index: 1;
+  pointer-events: none;
+  white-space: nowrap;
 }

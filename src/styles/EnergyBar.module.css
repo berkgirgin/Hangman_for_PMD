@@ -20,7 +20,7 @@
   border-radius: 999px 0 0 999px;
   overflow: hidden;
   position: relative;
-  transition: width 1.5s ease-in-out;
+  transition: width 2s ease-in-out;
 }
 
 .energyFill {

@@ -10,8 +10,8 @@ function HangmanDrawing() {
   const wrongGuessesCount = hangman.numberOfTurns.failedTurns;
   const correctGuessesCount = playedTurnsCount - wrongGuessesCount;
 
-  if (wrongGuessesCount > 5) {
-    throw new Error("energybar animation would not want more than 5 guesses");
+  if (wrongGuessesCount > 10) {
+    throw new Error("energybar animation would not want more than 10 guesses");
   }
 
   return (

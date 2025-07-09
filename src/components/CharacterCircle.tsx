@@ -1,12 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "../styles/CharacterCircle.module.css";
-import placeHolderImg from "../assets/images/tv_no_signal.gif";
 
 type CharacterCircleProps = {
-  videoSrc: string;
+  placeholderMedia: { type: "img" | "video"; src: string };
+  videoSrc?: string | null; // optional temporary video to play instead of placeholder
+  onClick?: () => void;
+  onVideoEnded?: () => void;
 };
 
-export function CharacterCircle({ videoSrc }: CharacterCircleProps) {
+export function CharacterCircle({
+  placeholderMedia,
+  videoSrc,
+  onClick,
+  onVideoEnded,
+}: CharacterCircleProps) {
   const [showPlaceholder, setShowPlaceholder] = useState(true);
   const [showVideo, setShowVideo] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -17,53 +24,58 @@ export function CharacterCircle({ videoSrc }: CharacterCircleProps) {
       setShowPlaceholder(true);
       return;
     }
-
     setShowPlaceholder(false);
-    const placeholderTimeout = setTimeout(() => {
-      setShowVideo(true);
-    }, 500);
-
-    return () => clearTimeout(placeholderTimeout);
+    const timer = setTimeout(() => setShowVideo(true), 500);
+    return () => clearTimeout(timer);
   }, [videoSrc]);
 
-  // Play video when showVideo becomes true
   useEffect(() => {
     if (showVideo && videoRef.current) {
       const playPromise = videoRef.current.play();
       if (playPromise !== undefined) {
-        playPromise.catch((error) => {
-          // Autoplay might be blocked or some other issue
-          console.warn("Video play failed:", error);
-        });
+        playPromise.catch((err) => console.warn("Video play failed:", err));
       }
     }
   }, [showVideo]);
 
-  function onVideoEnded() {
+  function handleVideoEnded() {
     setShowVideo(false);
     setTimeout(() => setShowPlaceholder(true), 200);
+    if (onVideoEnded) onVideoEnded();
   }
 
   return (
-    <div className={styles.circle}>
-      <img
-        src={placeHolderImg}
-        alt="Placeholder"
-        className={`${styles.placeholderImg} ${
-          showPlaceholder ? styles.fadeIn : styles.fadeOutToBlack
-        }`}
-      />
+    <div
+      className={styles.circle}
+      onClick={onClick}
+      style={{ cursor: onClick ? "pointer" : undefined }}
+    >
+      {showPlaceholder &&
+        (placeholderMedia.type === "img" ? (
+          <img
+            src={placeholderMedia.src}
+            alt="Placeholder"
+            className={styles.placeholderImg}
+          />
+        ) : (
+          <video
+            src={placeholderMedia.src}
+            muted
+            loop
+            playsInline
+            autoPlay
+            className={`${styles.placeholderVideo} ${styles.video}`}
+          />
+        ))}
 
-      {showVideo && (
+      {showVideo && videoSrc && (
         <video
           ref={videoRef}
           src={videoSrc}
-          muted
           playsInline
-          className={`${styles.video} ${
-            showVideo ? styles.fadeIn : styles.fadeOut
-          }`}
-          onEnded={onVideoEnded}
+          className={styles.video}
+          onEnded={handleVideoEnded}
+          autoPlay
         />
       )}
     </div>

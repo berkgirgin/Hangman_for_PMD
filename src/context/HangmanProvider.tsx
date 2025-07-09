@@ -8,7 +8,12 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import { KEYS } from "../data/keyboardKeys";
+import { listOfWords } from "../data/listOfWords";
 import characterVideoSrc from "../assets/video_messages/muck.mp4";
+import correctGuessVideoSrc from "../assets/video_messages/muck.mp4";
+import wrongGuessVideoSrc from "../assets/video_messages/no.mp4";
+import winVideoSrc from "../assets/video_messages/win_video.mp4";
+import loseVideoSrc from "../assets/video_messages/lose_video.mp4";
 
 type HangmanProviderProps = { children: ReactNode };
 
@@ -20,6 +25,9 @@ type HangmanContextType = {
   getRandomWordToGuess: () => string;
   characterVideo: string;
   playTurn: (characterValue: string) => void;
+  resetGame: () => void;
+  isGameEnding: boolean;
+  gameStatus: string;
 };
 
 const hangmanContext = createContext<HangmanContextType | null>(null);
@@ -37,7 +45,9 @@ function HangmanProvider({ children }: HangmanProviderProps) {
 
   // Function must be declared *before* state since it’s used in initial state
   function getRandomWordToGuess(): string {
-    return "bee"; // Replace with real random word logic later
+    // return "beeeeeerrrkk"; // Replace with real random word logic later
+    const randomIndex = Math.floor(Math.random() * listOfWords.length);
+    return listOfWords[randomIndex];
   }
 
   const [wordToGuess, setWordToGuess] = useState<string>(
@@ -52,6 +62,26 @@ function HangmanProvider({ children }: HangmanProviderProps) {
     "ongoing"
   );
   const [characterVideo, setCharacterVideo] = useState<string>(""); // default empty or idle video path
+  const [videoPlayCount, setVideoPlayCount] = useState(0);
+  const [isGameEnding, setIsGameEnding] = useState(false);
+
+  let audioUnlocked = false;
+
+  function unlockAudio() {
+    if (audioUnlocked) return;
+
+    // Use the standard AudioContext, fallback to webkitAudioContext with casting
+    const AudioContextClass = (window.AudioContext ||
+      (window as any).webkitAudioContext) as typeof AudioContext;
+
+    const audioCtx = new AudioContextClass();
+    const oscillator = audioCtx.createOscillator();
+    oscillator.connect(audioCtx.destination);
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + 0.01);
+
+    audioUnlocked = true;
+  }
 
   function addGuessedLetter(characterValue: string): void {
     setUsedLetters((prevLetters) => {
@@ -70,11 +100,26 @@ function HangmanProvider({ children }: HangmanProviderProps) {
   }
 
   function gameOver() {
+    // Set characterVideo based on win or lose
+
     if (gameStatus === "win") {
-      navigate("/end_page/win");
+      // navigate("/end_page/win");
+      setCharacterVideo(winVideoSrc + `?t=${videoPlayCount}`);
     } else if (gameStatus === "lose") {
-      navigate("/end_page/lose");
+      // navigate("/end_page/lose");
+      setCharacterVideo(loseVideoSrc + `?t=${videoPlayCount}`);
     }
+    setVideoPlayCount((c) => c + 1);
+  }
+
+  function resetGame() {
+    setWordToGuess(getRandomWordToGuess());
+    setUsedLetters([]);
+    setNumberOfTurns({ failedTurns: 0, allTurns: 0 });
+    setGameStatus("ongoing");
+    setCharacterVideo(""); // reset video to empty or idle state
+    setVideoPlayCount(0);
+    setIsGameEnding(false);
   }
 
   function playTurn(characterValue: string) {
@@ -85,20 +130,20 @@ function HangmanProvider({ children }: HangmanProviderProps) {
       throw new Error("characterValue must be a single character");
     }
 
+    unlockAudio();
+
     addGuessedLetter(characterValue);
     updateTurnCounts(characterValue);
     // NO direct updateGameStatus or navigation here — handled reactively below
 
-    // // Decide video based on the guess result
-    // if (wordToGuess.includes(characterValue)) {
-    //   // Correct guess video
-    //   setCharacterVideo("/assets/videos/happy.mp4");
-    // } else {
-    //   // Incorrect guess video
-    //   setCharacterVideo("/assets/videos/sad.mp4");
-    // }
+    // Set characterVideo based on correctness of guess
+    if (wordToGuess.includes(characterValue)) {
+      setCharacterVideo(correctGuessVideoSrc + `?t=${videoPlayCount}`);
+    } else {
+      setCharacterVideo(wrongGuessVideoSrc + `?t=${videoPlayCount}`);
+    }
 
-    setCharacterVideo(characterVideoSrc);
+    setVideoPlayCount((c) => c + 1);
   }
 
   // Update game status reactively based on current state
@@ -111,7 +156,7 @@ function HangmanProvider({ children }: HangmanProviderProps) {
 
     if (hasWon) {
       setGameStatus("win");
-    } else if (numberOfTurns.failedTurns >= 5 || allKeysUsed) {
+    } else if (numberOfTurns.failedTurns >= 10 || allKeysUsed) {
       setGameStatus("lose");
     } else {
       setGameStatus("ongoing");
@@ -120,7 +165,16 @@ function HangmanProvider({ children }: HangmanProviderProps) {
 
   // Navigate on game end (win or lose)
   useEffect(() => {
+    if (gameStatus === "ongoing") return;
+
+    setIsGameEnding(true); // show overlay
     gameOver();
+
+    // const timeoutId = setTimeout(() => {
+    //   gameOver(); // navigate
+    // }, 55000);
+
+    // return () => clearTimeout(timeoutId);
   }, [gameStatus]);
 
   return (
@@ -133,6 +187,9 @@ function HangmanProvider({ children }: HangmanProviderProps) {
         getRandomWordToGuess,
         characterVideo,
         playTurn,
+        resetGame,
+        isGameEnding,
+        gameStatus,
       }}
     >
       {children}

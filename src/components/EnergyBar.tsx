@@ -6,15 +6,20 @@ type EnergyBarProps = {
 };
 
 const EnergyBar: React.FC<EnergyBarProps> = ({ wrongGuesses }) => {
-  const clampedGuesses = Math.min(Math.max(wrongGuesses, 0), 5);
-  const percentage = 100 - clampedGuesses * 20;
+  const clampedGuesses = Math.min(Math.max(wrongGuesses, 0), 10);
+  const percentage = 100 - clampedGuesses * 10;
 
   const getFillColor = (percent: number): string => {
-    if (percent > 80) return "#00ff5e"; // Green
-    if (percent > 60) return "#a8ff00"; // Lime-Yellow
-    if (percent > 40) return "#ffd000"; // Yellow
-    if (percent > 20) return "#ff6a00"; // Orange
-    return "#ff0033"; // Red
+    if (percent > 90) return "#00ff5e"; // 100% - Neon Green
+    if (percent > 80) return "#33ff57"; // 90%
+    if (percent > 70) return "#a8ff00"; // 80%
+    if (percent > 60) return "#ccff00"; // 70%
+    if (percent > 50) return "#ffd000"; // 60%
+    if (percent > 40) return "#ff9900"; // 50%
+    if (percent > 30) return "#ff6a00"; // 40%
+    if (percent > 20) return "#ff3300"; // 30%
+    if (percent > 10) return "#ff0033"; // 20%
+    return "#990022"; // 10% or less
   };
 
   const fillColor = getFillColor(percentage);

@@ -1,27 +1,11 @@
-/* .letter {
-  width: 2.5rem;
-  height: 3rem;
-  margin: 0.25rem;
-  border-bottom: 2px solid #333;
-  font-size: 2rem;
-  text-align: center;
-  line-height: 3rem;
-  text-transform: uppercase;
-}
-
-.visible {
-  color: #000;
-}
-
-.hidden {
-  color: transparent;
-} */
-
 .hangmanword-main-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+
+  z-index: 2000;
+  position: relative;
 }
 
 .hangmanword-display-container {
