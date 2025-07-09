@@ -3,32 +3,35 @@ import { useHangmanContext } from "../context/HangmanProvider";
 import { useMemo } from "react";
 
 function HangmanWord() {
-  const { wordToGuess, usedLetters } = useHangmanContext();
+  const { wordToGuess, usedLetters, gameStatus } = useHangmanContext();
 
   const lettersToDisplay = useMemo(
     () =>
       wordToGuess.split("").map((char, index) => {
-        const isVisible =
-          wordToGuess.includes(char) && usedLetters.includes(char);
+        const isGuessed = usedLetters.includes(char);
+        const isGameLost = gameStatus === "lose";
+        const showLetter = isGuessed || isGameLost;
+
+        let className = `${classes.letter}`;
+        if (isGuessed) {
+          className += ` ${classes.visible}`;
+        } else if (isGameLost) {
+          className += ` ${classes.missing}`;
+        } else {
+          className += ` ${classes.hidden}`;
+        }
 
         return (
-          <div
-            key={index}
-            className={`${classes.letter} ${
-              isVisible ? classes.visible : classes.hidden
-            }`}
-            aria-hidden={!isVisible}
-          >
-            {isVisible ? char.toUpperCase() : ""}
+          <div key={index} className={className} aria-hidden={!showLetter}>
+            {showLetter ? char.toUpperCase() : ""}
           </div>
         );
       }),
-    [wordToGuess, usedLetters]
+    [wordToGuess, usedLetters, gameStatus]
   );
 
   return (
     <div className={classes["hangmanword-main-container"]}>
-      {/* <h2>Hangman Word</h2> */}
       <div className={classes["hangmanword-display-container"]}>
         {lettersToDisplay}
       </div>

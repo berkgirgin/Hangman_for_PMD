@@ -80,12 +80,12 @@
 
 /* When game is over */
 .hangmanWordGameOver {
-  color: white !important; /* force white text */
+  color: white;
   transform: scale(1.5);
 }
 .hangmanWordGameOver,
 .hangmanWordGameOver * {
-  color: white !important;
+  color: white !important; /* force white text */
 }
 
 .heartButton {
