@@ -5,11 +5,8 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { KEYS } from "../data/keyboardKeys";
-import { listOfWords } from "../data/listOfWords";
-import characterVideoSrc from "../assets/video_messages/muck.mp4";
 import correctGuessVideoSrc from "../assets/video_messages/muck.mp4";
 import wrongGuessVideoSrc from "../assets/video_messages/no.mp4";
 import winVideoSrc from "../assets/video_messages/win_video.mp4";
@@ -41,8 +38,6 @@ function useHangmanContext() {
 }
 
 function HangmanProvider({ children }: HangmanProviderProps) {
-  const navigate = useNavigate();
-
   // Function must be declared *before* state since it’s used in initial state
   function getRandomWordToGuess(): string {
     return "beeeeeeerk"; // Replace with real random word logic later
