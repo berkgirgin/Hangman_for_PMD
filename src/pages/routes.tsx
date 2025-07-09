@@ -1,5 +1,4 @@
 import { Navigate } from "react-router-dom";
-import App from "../App";
 import { Layout } from "../components/Layout";
 import { NotFoundPage } from "./NotFoundPage.tsx";
 import { StartPage } from "./StartPage.tsx";
